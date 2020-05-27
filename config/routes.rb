@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
-  get 'sessions/create'
-  get 'sessions/destroy'
-  get 'home/index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root to: 'home#index'
+
+  get 'auth/:provider/callback', to: 'sessions#create'
+  get 'auth/failure', to: redirect('/')
+  get 'signout', to: 'sessions#destroy', as: 'signout'
+
+  resources :sessions, only: %i[new create destroy]
+  resources :home, only: %i[index]
 end
